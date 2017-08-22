@@ -1,0 +1,19 @@
+<div>
+  <md-card *ngFor="let a of assets" style="margin: 15px;">
+    <md-card-header>
+      <md-card-title>{{a.name}}</md-card-title>
+      <md-card-subtitle>Identifier: {{a.id}}</md-card-subtitle>
+        
+    </md-card-header>
+        <md-card-content>
+          <p>
+            Last signal: 2012-12-12<br/>
+            Last know position: Here
+          </p>
+        </md-card-content>
+        <md-card-actions>
+          <button md-button [routerLink]="['/gmap', a.id]">Show On Map</button>
+          <button md-button>Show Sensors</button>
+        </md-card-actions>
+  </md-card>
+</div>
