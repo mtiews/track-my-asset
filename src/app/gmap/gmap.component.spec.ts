@@ -1,4 +1,8 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { AgmCoreModule } from '@agm/core';
 
 import { GmapComponent } from './gmap.component';
 
@@ -8,7 +12,13 @@ describe('GmapComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GmapComponent ]
+      declarations: [ GmapComponent ],
+      imports: [
+        RouterTestingModule
+      ],
+      schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
+      ]
     })
     .compileComponents();
   }));
