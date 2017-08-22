@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  mockbackend: true
+  mockbackend: true,
+  googleApiKey: 'AIzaSyCwHk44aKq08icKLYXonfI7LpM93Zzy-ww'
 };

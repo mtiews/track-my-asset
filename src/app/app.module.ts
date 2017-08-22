@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AgmCoreModule } from '@agm/core';
 
+import { environment } from '../environments/environment';
+
 import { assetServiceProvider } from './shared/services/service.providers';
 
 import { AppComponent } from './app.component';
@@ -50,7 +52,7 @@ const appRoutes: Routes = [
       appRoutes
     ),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCwHk44aKq08icKLYXonfI7LpM93Zzy-ww'
+      apiKey: environment.googleApiKey
     }),
     HttpModule
   ],
