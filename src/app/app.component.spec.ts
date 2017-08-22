@@ -8,9 +8,12 @@ import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 
+import { AuthService } from './shared/services/auth.service';
+
 import { NavigationComponent } from './navigation/navigation.component';
 import { AssetlistComponent } from './assetlist/assetlist.component';
 import { GmapComponent } from './gmap/gmap.component';
+import { LoginComponent } from './login/login.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -19,14 +22,23 @@ describe('AppComponent', () => {
         AppComponent,
         NavigationComponent,
         AssetlistComponent,
-        GmapComponent
+        GmapComponent,
+        LoginComponent
       ],
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([ 
+        {
+          path: 'login',
+          component: LoginComponent
+        }
+        ]),
         MaterialModule
       ],
       schemas: [
         CUSTOM_ELEMENTS_SCHEMA
+      ],
+      providers: [ 
+        AuthService 
       ]
     }).compileComponents();
   }));

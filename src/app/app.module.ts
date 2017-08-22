@@ -10,15 +10,22 @@ import { AgmCoreModule } from '@agm/core';
 
 import { environment } from '../environments/environment';
 
+import { AuthService } from './shared/services/auth.service';
+
 import { assetServiceProvider } from './shared/services/service.providers';
 
 import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { AssetlistComponent } from './assetlist/assetlist.component';
 import { GmapComponent } from './gmap/gmap.component';
+import { LoginComponent } from './login/login.component';
 
 const appRoutes: Routes = [
   {
+    path: 'login',
+    component: LoginComponent,
+    data: { title: 'Login' }
+  }, {
     path: 'list',
     component: AssetlistComponent,
     data: { title: 'Asset List' }
@@ -42,7 +49,8 @@ const appRoutes: Routes = [
     AppComponent,
     NavigationComponent,
     AssetlistComponent,
-    GmapComponent
+    GmapComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -57,7 +65,8 @@ const appRoutes: Routes = [
     HttpModule
   ],
   providers: [
-    assetServiceProvider
+    assetServiceProvider,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

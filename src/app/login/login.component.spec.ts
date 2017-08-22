@@ -1,30 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MaterialModule } from '@angular/material';
-
 import { AuthService } from '../shared/services/auth.service';
 
-import { NavigationComponent } from './navigation.component';
+import { LoginComponent } from './login.component';
 
-describe('NavigationComponent', () => {
-  let component: NavigationComponent;
-  let fixture: ComponentFixture<NavigationComponent>;
+describe('LoginComponent', () => {
+  let component: LoginComponent;
+  let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavigationComponent ],
-      imports: [ 
-        MaterialModule, 
-        RouterTestingModule 
-      ],
+      declarations: [ LoginComponent ],
+      imports: [ RouterTestingModule ],
       providers: [ AuthService ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NavigationComponent);
+    fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
