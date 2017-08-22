@@ -6,10 +6,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "buildrun": "ng build && node server.js",
+    "buildprod": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "buildrun": "ng build && node server.js"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
