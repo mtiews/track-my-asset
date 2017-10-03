@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 import * as auth0 from 'auth0-js';
 
@@ -8,16 +8,23 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class AuthService {
   
+  private _isAuthenticatedSource = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this._isAuthenticatedSource.asObservable();
+
+  private _userInfoSource = new BehaviorSubject<UserInfo>(null);
+  public userInfo$ = this._userInfoSource.asObservable();
+  
+  
   auth0 = new auth0.WebAuth({
     clientID: 'f1G413kRXgqQWOuuY5nXhFeRnlluOu6e',
     domain: 'tiews.eu.auth0.com',
     audience: 'https://tiews.eu.auth0.com/userinfo',
     redirectUri: environment.auth0RedirectUri,      
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid profile email'
   });
 
-  constructor(private router: Router) { }
+  constructor() { }
 
   public login(): void {
     this.auth0.authorize();
@@ -28,13 +35,20 @@ export class AuthService {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this.setSession(authResult);
-        this.router.navigate(['/']);
-      } else if (err) {
-        this.router.navigate(['/login']);
-        console.log(err);
-      } else {
-        this.router.navigate(['/login']);
+        const that = this;
+        this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
+          if(user) {
+            that._userInfoSource.next(new UserInfo(user.email, user.name, user.email_verified));
+          } else if(err) {
+            console.log('Getting UserInfo failed: ' + err);
+            that._userInfoSource.next(null);
+          }
+        });
+      } else if(err) {
+        console.log('Authentication Error: ' + err);
       }
+
+      this._isAuthenticatedSource.next(this.isAuthenticated());
     });
   }
 
@@ -51,15 +65,23 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
-    // Go back to the home route
-    this.router.navigate(['/login']);
+    
+    this._userInfoSource.next(null);
+    this._isAuthenticatedSource.next(this.isAuthenticated());
   }
 
-  public isAuthenticated(): boolean {
+  private isAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    const expiresAtJson = localStorage.getItem('expires_at');
+    if(expiresAtJson == null) {
+      return false;
+    }
+    const expiresAt = JSON.parse(expiresAtJson);
     return new Date().getTime() < expiresAt;
   }
+}
 
+export class UserInfo {
+  constructor(public mail: string, public name: string, public mailVerified: boolean) {}
 }

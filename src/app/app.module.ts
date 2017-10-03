@@ -15,10 +15,10 @@ import { AuthService } from './shared/services/auth.service';
 import { assetServiceProvider } from './shared/services/service.providers';
 
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
 import { AssetlistComponent } from './assetlist/assetlist.component';
 import { GmapComponent } from './gmap/gmap.component';
 import { LoginComponent } from './login/login.component';
+import { InfoComponent } from './info/info.component';
 
 const appRoutes: Routes = [
   {
@@ -29,6 +29,10 @@ const appRoutes: Routes = [
     path: 'list',
     component: AssetlistComponent,
     data: { title: 'Asset List' }
+  }, {
+    path: 'info',
+    component: InfoComponent,
+    data: { title: 'Info' }
   }, {
     path: 'gmap',
     component: GmapComponent,
@@ -47,10 +51,10 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    NavigationComponent,
     AssetlistComponent,
     GmapComponent,
-    LoginComponent
+    LoginComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,

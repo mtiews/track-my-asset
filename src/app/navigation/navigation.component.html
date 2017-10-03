@@ -1,8 +1,0 @@
-<md-toolbar color="primary">
-  <span>
-    <button *ngIf="auth.isAuthenticated()" md-button routerLink="/list"><md-icon>grid_on</md-icon> List</button>
-    <button *ngIf="auth.isAuthenticated()" md-button routerLink="/gmap"><md-icon>places</md-icon> GMap</button>
-  </span>
-  <span style="flex: 1 1 auto;"></span>
-  <button *ngIf="auth.isAuthenticated()" md-button color="accent" (click)="onLogout()"><md-icon>power_settings_new</md-icon></button>
-</md-toolbar>
