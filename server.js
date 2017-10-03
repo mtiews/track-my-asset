@@ -1,3 +1,5 @@
+// Load process.env via .env package
+require('dotenv').config()
 // Get dependencies
 const express = require('express');
 const path = require('path');
