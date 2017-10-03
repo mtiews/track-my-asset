@@ -8,6 +8,7 @@
     "build": "ng build",
     "buildrun": "ng build && node server.js",
     "buildprod": "ng build --prod",
+    "buildprodhref": "ng build --prod --base-href '/trackmyasset/'",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
