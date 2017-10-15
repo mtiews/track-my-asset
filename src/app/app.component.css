@@ -17,7 +17,8 @@
 }
 
 .sidenav {
-    padding: 20px;
+    padding: 5px;
+    min-width: 200px;
 }
 
 .sidenav-content {

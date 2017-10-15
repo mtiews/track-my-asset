@@ -10,6 +10,8 @@ Used technologies:
 * [Angular 4](https://angular.io/)
 * [Angular Material2](https://github.com/angular/material2) 
 * [Angular Google Maps](https://angular-maps.com/)
+* [Auth0](https://auth0.com/)
+* [LokiJS](http://lokijs.org/#/)
 
 ## Development
 

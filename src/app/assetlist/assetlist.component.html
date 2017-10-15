@@ -1,19 +1,15 @@
 <div>
-  <md-card *ngFor="let a of assets" style="margin: 15px;">
-    <md-card-header>
-      <md-card-title>{{a.name}}</md-card-title>
-      <md-card-subtitle>Identifier: {{a.id}}</md-card-subtitle>
+  <mat-card *ngFor="let a of assets" style="margin: 15px;">
+    <mat-card-header>
+      <mat-card-title>{{a.name}}</mat-card-title>
+      <mat-card-subtitle>Identifier: {{a.id}}</mat-card-subtitle>
         
-    </md-card-header>
-        <md-card-content>
-          <p>
-            Last signal: 2012-12-12<br/>
-            Last know position: Here
-          </p>
-        </md-card-content>
-        <md-card-actions>
-          <button md-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
-          <button md-raised-button>Show Sensors</button>
-        </md-card-actions>
-  </md-card>
+    </mat-card-header>
+        <mat-card-content>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
+          <button mat-raised-button [routerLink]="['/details', a.id]">Details</button>
+        </mat-card-actions>
+  </mat-card>
 </div>

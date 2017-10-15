@@ -1,37 +1,37 @@
 <div class="container">
   <div class="mat-elevation-z6 nav">
-      <md-toolbar color="primary">
-        <button md-icon-button *ngIf="isAuthenticated" (click)="sidenav.toggle()">
-            <md-icon class="md-24" >menu</md-icon>
+      <mat-toolbar color="primary">
+        <button mat-icon-button *ngIf="isAuthenticated" (click)="sidenav.toggle()">
+            <mat-icon class="mat-24" >menu</mat-icon>
         </button>￼
         <span style="flex: 1 1 auto;"></span>
         Track-my-Asset
         <span style="flex: 1 1 auto;"></span>
-        <button *ngIf="isAuthenticated" md-button color="accent" (click)="onLogout()"><md-icon>power_settings_new</md-icon></button>  
-      </md-toolbar>
+        <button *ngIf="isAuthenticated" mat-button color="accent" (click)="onLogout()"><mat-icon>power_settings_new</mat-icon></button>  
+      </mat-toolbar>
   </div>
-  <md-sidenav-container class="sidenav-container">
-      <md-sidenav [mode]="sidenavMode" [opened]="sidenavOpened && isAuthenticated" #sidenav class="mat-elevation-z6 sidenav">
-          <md-nav-list>
-              <a md-list-item (click)="closeSideNav()" [routerLink]="['/list']">
-                <md-icon md-list-icon>grid_on</md-icon>
-                <span md-line>Assets</span>
-                <span md-line class="secondary">List</span>
-              </a>
-              <a md-list-item (click)="closeSideNav()" [routerLink]="['/gmap']">
-                <md-icon md-list-icon>places</md-icon>
-                <span md-line>Assets</span>
-                <span md-line class="secondary">Map</span>
-              </a>
-              <md-divider></md-divider>
-              <a md-list-item (click)="closeSideNav()" [routerLink]="['/info']">
-                <md-icon md-list-icon>info_outline</md-icon>
-                <span md-line>Info</span>
-              </a>
-            </md-nav-list>
-      </md-sidenav>
+  <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav [mode]="sidenavMode" [opened]="sidenavOpened && isAuthenticated" #sidenav class="mat-elevation-z6 sidenav">
+        <mat-nav-list>
+          <a mat-list-item (click)="closeSideNav()" [routerLink]="['/list']">
+            <mat-icon mat-list-icon>view_list</mat-icon>
+            <span mat-line>Assets</span>
+            <span mat-line class="secondary">List</span>
+          </a>
+          <a mat-list-item (click)="closeSideNav()" [routerLink]="['/details']">
+            <mat-icon mat-list-icon>playlist_add</mat-icon>
+            <span mat-line>Assets</span>
+            <span mat-line class="secondary">Add New</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item (click)="closeSideNav()" [routerLink]="['/info']">
+            <mat-icon mat-list-icon>info_outline</mat-icon>
+            <span mat-line>Info</span>
+          </a>
+        </mat-nav-list>
+      </mat-sidenav>
       <div class="sidenav-content">
         <router-outlet></router-outlet>  
       </div>
-    </md-sidenav-container>  
+    </mat-sidenav-container>  
 </div>

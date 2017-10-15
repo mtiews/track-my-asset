@@ -1,10 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
 
-import { MaterialModule } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { 
+  MatToolbarModule, 
+  MatSidenavModule, 
+  MatListModule, 
+  MatButtonModule, 
+  MatCardModule, 
+  MatSelectModule, 
+  MatIconModule, 
+  MatInputModule,
+  MatSnackBarModule 
+} from '@angular/material';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import 'hammerjs';
 
 import { AgmCoreModule } from '@agm/core';
 
@@ -19,6 +33,7 @@ import { AssetlistComponent } from './assetlist/assetlist.component';
 import { GmapComponent } from './gmap/gmap.component';
 import { LoginComponent } from './login/login.component';
 import { InfoComponent } from './info/info.component';
+import { AssetdetailsComponent } from './assetdetails/assetdetails.component';
 
 const appRoutes: Routes = [
   {
@@ -41,6 +56,14 @@ const appRoutes: Routes = [
     path: 'gmap/:id',
     component: GmapComponent,
     data: { title: 'Map' }
+  }, {
+    path: 'details',
+    component: AssetdetailsComponent,
+    data: { title: 'New Asset' }
+  }, {
+    path: 'details/:id',
+    component: AssetdetailsComponent,
+    data: { title: 'Asset Details' }
   }, { 
     path: '',
     redirectTo: '/list',
@@ -54,18 +77,29 @@ const appRoutes: Routes = [
     AssetlistComponent,
     GmapComponent,
     LoginComponent,
-    InfoComponent
+    InfoComponent,
+    AssetdetailsComponent
   ],
   imports: [
     BrowserModule,
-    MaterialModule,
     BrowserAnimationsModule,
+    FormsModule,
     RouterModule.forRoot(
       appRoutes
     ),
     AgmCoreModule.forRoot({
       apiKey: environment.googleApiKey
     }),
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSnackBarModule,
     HttpModule
   ],
   providers: [

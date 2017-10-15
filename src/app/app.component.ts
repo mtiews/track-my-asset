@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './shared/services/auth.service';
-import { MdSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   sidenavOpened = false;
  
   @ViewChild('sidenav')
-  sidenav: MdSidenav;
+  sidenav: MatSidenav;
 
   constructor(public auth: AuthService, private router: Router) {
   }

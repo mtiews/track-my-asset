@@ -1,27 +1,27 @@
 <div>
-  <md-card class="infocard">
-    <md-card-header>
-      <md-card-title>User Info</md-card-title>
-      <md-card-subtitle>Information about the current user</md-card-subtitle>
-    </md-card-header>
-    <md-card-content>
-      <p>
-        Name: {{userInfo?.name}}<br/>
-        eMail: {{userInfo?.mail}}<br/>
-        Mail verified: {{userInfo?.mailVerified}}
-      </p>
-    </md-card-content>
-  </md-card>
-  <md-card class="infocard">
-      <md-card-header>
-        <md-card-title>Application Info</md-card-title>
-        <md-card-subtitle>Information about the application</md-card-subtitle>
-      </md-card-header>
-      <md-card-content>
-        <p>
-          Version: 0.0.1<br/>
-          Github: http://github.com/cccc
-        </p>
-      </md-card-content>
-  </md-card>
+  <mat-card class="infocard">
+    <mat-card-header>
+      <mat-card-title>User Info</mat-card-title>
+      <mat-card-subtitle>Information about the current user</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <table>
+        <tr><td>Name</td><td>{{userInfo?.name}}</td></tr>
+        <tr><td>eMail</td><td>{{userInfo?.mail}}</td></tr>
+        <tr><td>Mail verified</td><td>{{userInfo?.mailVerified}}</td></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="infocard">
+      <mat-card-header>
+        <mat-card-title>Application Info</mat-card-title>
+        <mat-card-subtitle>Information about the application</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <table>
+          <tr><td>Version</td><td>0.0.1</td></tr>
+          <tr><td>Source Code</td><td><a href="https://github.com/mtiews/track-my-asset">Track-My-Asset</a></td></tr>
+        </table>
+      </mat-card-content>
+  </mat-card>
 </div>

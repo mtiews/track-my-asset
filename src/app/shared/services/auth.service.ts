@@ -14,6 +14,7 @@ export class AuthService {
   private _userInfoSource = new BehaviorSubject<UserInfo>(null);
   public userInfo$ = this._userInfoSource.asObservable();
   
+  private currentUserInfo: UserInfo;
   
   auth0 = new auth0.WebAuth({
     clientID: 'f1G413kRXgqQWOuuY5nXhFeRnlluOu6e',
@@ -34,20 +35,23 @@ export class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
-        this.setSession(authResult);
-        const that = this;
-        this.auth0.client.userInfo(authResult.accessToken, function(err, user) {
-          if(user) {
-            that._userInfoSource.next(new UserInfo(user.email, user.name, user.email_verified));
-          } else if(err) {
-            console.log('Getting UserInfo failed: ' + err);
-            that._userInfoSource.next(null);
-          }
-        });
+        this.setSession(authResult);        
       } else if(err) {
         console.log('Authentication Error: ' + err);
       }
 
+      const that = this;      
+      if(this.isAuthenticated()) {
+        this.auth0.client.userInfo(localStorage.getItem('access_token'), function(err, user) {
+          if(user) {
+            that.currentUserInfo = new UserInfo(user.email, user.name, user.email_verified);
+          } else if(err) {
+            console.log('Getting UserInfo failed: ' + err);
+            that.currentUserInfo = null;
+          }
+          that._userInfoSource.next(that.currentUserInfo);
+        });
+      }
       this._isAuthenticatedSource.next(this.isAuthenticated());
     });
   }
@@ -79,6 +83,14 @@ export class AuthService {
     }
     const expiresAt = JSON.parse(expiresAtJson);
     return new Date().getTime() < expiresAt;
+  }
+
+  public getIdToken() {
+    return localStorage.getItem('id_token');
+  }
+
+  public getCurrentUserInfo() {
+    return this.currentUserInfo;
   }
 }
 
