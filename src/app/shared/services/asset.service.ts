@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AssetService {
 
-  baseUrl = '/api';
+  baseUrl = './api';
 
   constructor(private http: Http, private auth: AuthService) { }
 
@@ -53,16 +53,34 @@ export class AssetService {
 @Injectable()
 export class AssetServiceMock extends AssetService {
 
+  private assets: Map<String, Asset> = new Map();
   constructor() { 
     super(undefined, undefined);
   }
 
   getAssets(): Observable<Asset[]> {
-    const assets = new Array<Asset>();
-    for(let i = 0; i < 100; i++) {
-      assets.push(new Asset('ID_' + i, 'owner@example.com', 'private', 'Name ' + i, 'Desc' + 1, 0, 0));
-    }
-    return Observable.of(assets);
+    return Observable.of(Array.from(this.assets.values()));
+  }
+
+  getAsset(id: string): Observable<Asset> {
+    return Observable.of(this.assets.get(id));
+  }
+
+  createAsset(asset: Asset): Observable<Asset> {
+    asset.id = (new Date()).getTime().toString();
+    this.assets.set(asset.id, asset);
+    return Observable.of(asset);
+  }
+
+  updateAsset(asset: Asset): Observable<Asset> {
+    this.assets.set(asset.id, asset);
+    return Observable.of(asset);
+  }
+
+  deleteAsset(id: string): Observable<Asset> {
+    const asset = this.assets.get(id);
+    this.assets.delete(id);
+    return Observable.of(asset);
   }
 }
 

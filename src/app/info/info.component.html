@@ -6,10 +6,11 @@
     </mat-card-header>
     <mat-card-content>
       <table>
-        <tr><td>Name</td><td>{{userInfo?.name}}</td></tr>
-        <tr><td>eMail</td><td>{{userInfo?.mail}}</td></tr>
-        <tr><td>Mail verified</td><td>{{userInfo?.mailVerified}}</td></tr>
+        <tr><td>Name:</td><td>{{userInfo?.name}}</td></tr>
+        <tr><td>eMail:</td><td>{{userInfo?.mail}}</td></tr>
+        <tr><td>eMail verified:</td><td>{{userInfo?.mailVerified}}</td></tr>
       </table>
+      <div *ngIf="!!userInfo?.mailVerified == false">Your eMail address is not verified. You are only abled to view public assets.</div>
     </mat-card-content>
   </mat-card>
   <mat-card class="infocard">

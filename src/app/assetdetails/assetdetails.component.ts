@@ -26,6 +26,7 @@ export class AssetdetailsComponent implements OnInit {
             this.asset = result;
           },
           (error) => {
+            this.showSnackbar('ERROR: Loading asset failed!');
             console.error('Loading asset failed');
           },
           () => {}
@@ -89,7 +90,7 @@ export class AssetdetailsComponent implements OnInit {
     let config = new MatSnackBarConfig();
     config.verticalPosition = <MatSnackBarVerticalPosition> 'bottom';
     config.horizontalPosition = <MatSnackBarHorizontalPosition> 'center';
-    config.duration = 2000;
-    this.snackBar.open(message, null, config);
+    config.duration = 10000;
+    this.snackBar.open(message, 'Close', config);
   }
 }

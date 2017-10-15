@@ -16,7 +16,6 @@ export class InfoComponent implements OnInit {
   ngOnInit() {
     this.auth.userInfo$.subscribe((userInfo) => {
       this.userInfo = userInfo;
-      console.log('Userinfo changed...');
     });
   }
 
