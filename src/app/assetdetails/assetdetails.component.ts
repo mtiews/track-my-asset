@@ -13,7 +13,7 @@ import { AssetService, Asset } from '../shared/services/asset.service';
 export class AssetdetailsComponent implements OnInit {
 
   readonly = true;
-  asset: Asset = null;
+  asset: Asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
 
   constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
@@ -33,7 +33,7 @@ export class AssetdetailsComponent implements OnInit {
       }
       else {
         this.readonly = false;
-        this.asset = new Asset(null, this.auth.getCurrentUserInfo().mail, '', '', 0, 0);
+        this.asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
       }
     });
   }

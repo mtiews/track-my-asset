@@ -60,12 +60,14 @@ export class AssetServiceMock extends AssetService {
   getAssets(): Observable<Asset[]> {
     const assets = new Array<Asset>();
     for(let i = 0; i < 100; i++) {
-      assets.push(new Asset('ID_' + i, 'owner@example.com', 'Name ' + i, 'Desc' + 1, 0, 0));
+      assets.push(new Asset('ID_' + i, 'owner@example.com', 'private', 'Name ' + i, 'Desc' + 1, 0, 0));
     }
     return Observable.of(assets);
   }
 }
 
 export class Asset {
-  constructor(public id: string, public owner: string, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
+  constructor(public id: string, public owner: string, public visibility: AssetVisibility, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
 }
+
+export declare type AssetVisibility = 'private' | 'public';
