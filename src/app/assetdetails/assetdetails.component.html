@@ -3,35 +3,32 @@
       <mat-card-header>
         <mat-card-title><h3>{{asset?.id ? 'Asset Details' : 'Create New Asset'}}</h3></mat-card-title>
         <mat-card-subtitle>Identifier: {{asset?.id ? asset.id : '[will be created automatically for new Assets]'}}</mat-card-subtitle>
+        <mat-card-subtitle>Owner: {{asset?.owner ? asset.owner : '[will be set automatically for new Assets]'}}</mat-card-subtitle>
       </mat-card-header>
-          <mat-card-content>
-            <form class="form" #assetForm="ngForm">
-              <div class="input-container">
-                <mat-form-field class="input-field" *ngIf="isOwner">
-                  <input matInput readonly="true" type="email" placeholder="Asset Owner" [(ngModel)]="asset.owner" name="owner" required="true">
-                  <mat-hint align="start">Owner of the Asset, can not be changed.</mat-hint>
-                </mat-form-field>
-                <mat-form-field class="input-field">
-                  <input matInput [readonly]="readonly" placeholder="Asset Name" [(ngModel)]="asset.name" name="assetname" required="true">
-                </mat-form-field>
-                <mat-form-field class="input-field">
-                  <textarea matInput [readonly]="readonly" placeholder="Asset Description" [(ngModel)]="asset.description" name="assetdesc"></textarea>
-                </mat-form-field>
-                <mat-form-field class="input-field" *ngIf="isOwner">
-                  <mat-select [disabled]="readonly" placeholder="Visibility" [(ngModel)]="asset.visibility" name="assetvis" required="true">
-                      <mat-option value="private">Private</mat-option>
-                      <mat-option value="public">Public</mat-option>
-                  </mat-select>
-                  <mat-hint align="start"><strong>If you set this to <i>Public</i> everyone will see this Asset! Take care.</strong></mat-hint>
-                </mat-form-field>
-              </div>
-            </form>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-raised-button *ngIf="!readonly && isOwner" [disabled]="assetForm.invalid" (click)="saveAssetClicked()">Save Asset</button>
-            <button mat-raised-button *ngIf="readonly && isOwner" (click)="editAssetClicked()">Edit Asset</button>
-            <button mat-raised-button *ngIf="asset?.id && isOwner" (click)="deleteAssetClicked()">Delete Asset</button>
-          </mat-card-actions>
+      <mat-card-content>
+        <form class="form" #assetForm="ngForm">
+          <div class="input-container">
+            <mat-form-field class="input-field">
+              <input matInput [readonly]="readonly" placeholder="Asset Name" [(ngModel)]="asset.name" name="assetname" required="true">
+            </mat-form-field>
+            <mat-form-field class="input-field">
+              <textarea matInput [readonly]="readonly" placeholder="Asset Description" [(ngModel)]="asset.description" name="assetdesc"></textarea>
+            </mat-form-field>
+            <mat-form-field class="input-field" *ngIf="isOwner">
+              <mat-select [disabled]="readonly" placeholder="Visibility" [(ngModel)]="asset.visibility" name="assetvis" required="true">
+                  <mat-option value="private">Private</mat-option>
+                  <mat-option value="public">Public</mat-option>
+              </mat-select>
+              <mat-hint align="start"><strong>If you set this to <i>Public</i> everyone will see this Asset! Take care.</strong></mat-hint>
+            </mat-form-field>
+          </div>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button *ngIf="!readonly && isOwner" [disabled]="assetForm.invalid" (click)="saveAssetClicked()">Save Asset</button>
+        <button mat-raised-button *ngIf="readonly && isOwner" (click)="editAssetClicked()">Edit Asset</button>
+        <button mat-raised-button *ngIf="asset?.id && isOwner" (click)="deleteAssetClicked()">Delete Asset</button>
+      </mat-card-actions>
     </mat-card>
     <mat-card style="margin: 15px;">
       <mat-card-header>

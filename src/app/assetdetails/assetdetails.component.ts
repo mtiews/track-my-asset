@@ -15,22 +15,42 @@ export class AssetdetailsComponent implements OnInit {
   readonly = true;
   isOwner = false;
   asset: Asset = null;
+  userInfo: UserInfo = null;
+  isNewAsset: boolean = false;
 
   constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
     this.resetForm();
+    
+    this.auth.userInfo$.subscribe((userInfo) => {
+      this.userInfo = userInfo;
+      if(this.isNewAsset || this.asset && this.userInfo && this.asset.owner === this.userInfo.mail) {
+        this.isOwner = true;
+      } else {
+        this.isOwner = false;
+      }
+    });
+
     this.route.params.subscribe((params) => {
       this.resetForm();
+
       const assetId = params['id'];
       if(assetId) {
         this.service.getAsset(assetId).subscribe(
           (result) => {
-            this.asset = result;
-            if(this.asset.owner === this.auth.getCurrentUserInfo().mail) {
-              this.isOwner = true;
+            if(result) {
+              this.asset = result;
+              this.readonly = true;
+              if(this.asset && this.userInfo && this.asset.owner === this.userInfo.mail) {
+                this.isOwner = true;
+              } else {
+                this.isOwner = false;
+              }
             } else {
-              this.isOwner = false;
+              setTimeout(() =>
+                this.showSnackbar('ERROR: Asset not found!'),
+                1000);
             }
           },
           (error) => {
@@ -39,11 +59,8 @@ export class AssetdetailsComponent implements OnInit {
           },
           () => {}
         );
-      }
-      else {
-        this.readonly = false;
-        this.isOwner = true;
-        this.asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
+      } else {
+        this.isNewAsset = true;
       }
     });
   }
@@ -97,7 +114,9 @@ export class AssetdetailsComponent implements OnInit {
   }
 
   resetForm() {
-    this.asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
+    this.readonly = false;
+    this.isOwner = true;
+    this.asset = new Asset(null, null, 'private', '', '', 0, 0);
   }
 
   showSnackbar(message: string) {

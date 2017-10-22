@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from './shared/services/auth.service';
 import { MatSidenav } from '@angular/material/sidenav';
 
@@ -17,21 +17,20 @@ export class AppComponent implements OnInit {
   @ViewChild('sidenav')
   sidenav: MatSidenav;
 
-  constructor(public auth: AuthService, private router: Router) {
+  constructor(public auth: AuthService, private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.auth.isAuthenticated$.subscribe((authenticated) => {
-      const stateChanged = this.isAuthenticated !== authenticated;
-      this.isAuthenticated = authenticated;
-      if(stateChanged) {
-        if(authenticated) {
-          this.router.navigate(['/list']);
-        } else {
-          this.router.navigate(['/login']);  
-        }
-      }
+    this.auth.hasLoggedIn$.subscribe(() => {
+        this.isAuthenticated = true;
+        this.router.navigate(['']);
     });
+    this.auth.sessionHasExpired$.subscribe(() => {
+      console.log('AppComponent: Session has expired!')
+      this.isAuthenticated = false;
+      this.router.navigate(['/login']);
+    });
+    this.isAuthenticated = this.auth.checkIfIsAuthenticated();
     this.auth.handleAuthentication();
     this.configureSideNav();
   }

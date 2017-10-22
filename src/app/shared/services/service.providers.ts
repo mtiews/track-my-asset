@@ -6,7 +6,7 @@ import { AssetService, AssetServiceMock } from './asset.service';
 import { AuthService } from './auth.service';
 
 export let assetServiceFactory = (http: Http, auth: AuthService) => {
-    return environment.mockbackend ? new AssetServiceMock() : new AssetService(http, auth);
+    return environment.mockbackend ? new AssetServiceMock(auth) : new AssetService(http, auth);
 };
   
 export let assetServiceProvider = { 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Subject} from 'rxjs/Subject';
 
 import * as auth0 from 'auth0-js';
 
@@ -8,11 +9,14 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class AuthService {
   
-  private _isAuthenticatedSource = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$ = this._isAuthenticatedSource.asObservable();
-
   private _userInfoSource = new BehaviorSubject<UserInfo>(null);
   public userInfo$ = this._userInfoSource.asObservable();
+  
+  private _hasLoggedInSource = new Subject<any>();
+  public hasLoggedIn$ = this._hasLoggedInSource.asObservable();
+  
+  private _sessionHasExpiredSource = new Subject<any>();
+  public sessionHasExpired$ = this._sessionHasExpiredSource.asObservable();
   
   private currentUserInfo: UserInfo;
   
@@ -35,13 +39,13 @@ export class AuthService {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
-        this.setSession(authResult);        
+        this.setSession(authResult);
+        this._hasLoggedInSource.next(null);
       } else if(err) {
         console.log('Authentication Error: ' + err);
       }
-
       const that = this;      
-      if(this.isAuthenticated()) {
+      if(this.checkIfIsAuthenticated()) {
         this.auth0.client.userInfo(localStorage.getItem('access_token'), function(err, user) {
           if(user) {
             that.currentUserInfo = new UserInfo(user.email, user.name, user.email_verified);
@@ -52,7 +56,6 @@ export class AuthService {
           that._userInfoSource.next(that.currentUserInfo);
         });
       }
-      this._isAuthenticatedSource.next(this.isAuthenticated());
     });
   }
 
@@ -71,27 +74,32 @@ export class AuthService {
     localStorage.removeItem('expires_at');
     
     this._userInfoSource.next(null);
-    this._isAuthenticatedSource.next(this.isAuthenticated());
+    this._sessionHasExpiredSource.next();
   }
 
-  private isAuthenticated(): boolean {
+  public checkIfIsAuthenticated(): boolean {
     // Check whether the current time is past the
     // access token's expiry time
     const expiresAtJson = localStorage.getItem('expires_at');
     if(expiresAtJson == null) {
+      this.logout();
       return false;
     }
     const expiresAt = JSON.parse(expiresAtJson);
-    return new Date().getTime() < expiresAt;
+    const result = new Date().getTime() < expiresAt;
+    if(!result) {
+      this.logout();
+    }
+    return result;
   }
 
   public getIdToken() {
-    this._isAuthenticatedSource.next(this.isAuthenticated());
+    this.checkIfIsAuthenticated();
     return localStorage.getItem('id_token');
   }
 
   public getCurrentUserInfo() {
-    this._isAuthenticatedSource.next(this.isAuthenticated());
+    this.checkIfIsAuthenticated();
     return this.currentUserInfo;
   }
 }

@@ -11,7 +11,7 @@ export class AssetService {
 
   baseUrl = './api';
 
-  constructor(private http: Http, private auth: AuthService) { }
+  constructor(private http: Http, protected auth: AuthService) { }
 
   getAssets(): Observable<Asset[]> {
     return this.http.get(this.baseUrl + '/assets', this.getRequestOptions())
@@ -68,8 +68,8 @@ export class AssetService {
 export class AssetServiceMock extends AssetService {
 
   private assets: Map<String, Asset> = new Map();
-  constructor() { 
-    super(undefined, undefined);
+  constructor(protected auth: AuthService) { 
+    super(undefined, auth);
   }
 
   getAssets(): Observable<Asset[]> {
@@ -92,6 +92,7 @@ export class AssetServiceMock extends AssetService {
 
   createAsset(asset: Asset): Observable<Asset> {
     asset.id = (new Date()).getTime().toString();
+    asset.owner = this.auth.getCurrentUserInfo().mail;
     this.assets.set(asset.id, asset);
     return Observable.of(asset);
   }
