@@ -1,7 +1,7 @@
 <div style="height: 100%;">
   <agm-map style="height: 100%;" [latitude]="lat" [longitude]="lng" [zoom]="zoom">
     <agm-marker [latitude]="lat" [longitude]="lng" [title]="title">
-      <agm-info-window>...some more details...</agm-info-window>
+      <agm-info-window>{{title}}</agm-info-window>
     </agm-marker>
   </agm-map>
 </div>

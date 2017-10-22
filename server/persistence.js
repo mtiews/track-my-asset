@@ -2,27 +2,30 @@ const loki = require("lokijs");
 const uuidv4 = require('uuid/v4');
 
 var persistence = {
-    getAllAssets: function() {
-        return db.getCollection(ASSET_COLLECTION).find({})
+    getAllAssetsByOwner: function(owner) {
+        return stripResultsetMetadata(db.getCollection(ASSET_COLLECTION).find({'owner': owner}));
+    },
+    getPublicAssets: function(owner) {
+        return stripResultsetMetadata(db.getCollection(ASSET_COLLECTION).find({'visibility': 'public'}));
     },
     getAssetById: function(id) {
-        return db.getCollection(ASSET_COLLECTION).findOne({'id': id});
+        return stripMetadata(db.getCollection(ASSET_COLLECTION).findOne({'id': id}));
     },
     createAsset: function(asset) {
         asset.id = uuidv4();
-        return db.getCollection(ASSET_COLLECTION).insert(asset)
+        return stripMetadata(db.getCollection(ASSET_COLLECTION).insert(asset));
     },
     updateAsset: function(asset) {
-        var oldAsset = db.getCollection(ASSET_COLLECTION).findOne({'id': asset.id});
+        const oldAsset = db.getCollection(ASSET_COLLECTION).findOne({'id': asset.id});
         oldAsset.name = asset.name;
         oldAsset.description = asset.description;
         oldAsset.visibility = asset.visibility;
-        return db.getCollection(ASSET_COLLECTION).update(asset);
+        return stripMetadata(db.getCollection(ASSET_COLLECTION).update(oldAsset));
     },
     deleteAsset: function(id) {
-        var asset = db.getCollection(ASSET_COLLECTION).findOne({'id': id});
+        const asset = db.getCollection(ASSET_COLLECTION).findOne({'id': id});
         db.getCollection(ASSET_COLLECTION).remove(asset);
-        return asset;
+        return stripMetadata(asset);
     }
 
 }
@@ -41,6 +44,21 @@ function databaseInitialize() {
   if (assets === null) {
     assets = db.addCollection(ASSET_COLLECTION, { unique: ['id'], indices: ['id'] });
   }
+}
+
+function stripMetadata(result) {
+	const cleanRec = Object.assign({}, result);
+    delete cleanRec['meta'];
+    delete cleanRec['$loki'];
+    return cleanRec;
+}
+
+function stripResultsetMetadata( results ) {
+	const records = [];
+	for (var i = 0; i < results.length; i++) {
+        records.push( stripMetadata(results[i]) );
+	}
+	return records;
 }
 
 module.exports = persistence;

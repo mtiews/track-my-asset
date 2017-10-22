@@ -14,7 +14,8 @@ import {
   MatSelectModule, 
   MatIconModule, 
   MatInputModule,
-  MatSnackBarModule 
+  MatSnackBarModule, 
+  MatTabsModule
 } from '@angular/material';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -100,6 +101,7 @@ const appRoutes: Routes = [
     MatInputModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatTabsModule,
     HttpModule
   ],
   providers: [

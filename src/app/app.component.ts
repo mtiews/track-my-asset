@@ -9,7 +9,7 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  isAuthenticated = false;
+  isAuthenticated = null;
   smallScreen = false;
   sidenavMode = 'side';
   sidenavOpened = false;
@@ -22,11 +22,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.auth.isAuthenticated$.subscribe((authenticated) => {
+      const stateChanged = this.isAuthenticated !== authenticated;
       this.isAuthenticated = authenticated;
-      if(authenticated) {
-        this.router.navigate(['/list']);
-      } else {
-        this.router.navigate(['/login']);  
+      if(stateChanged) {
+        if(authenticated) {
+          this.router.navigate(['/list']);
+        } else {
+          this.router.navigate(['/login']);  
+        }
       }
     });
     this.auth.handleAuthentication();

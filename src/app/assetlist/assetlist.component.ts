@@ -10,14 +10,21 @@ import { AssetService, Asset } from '../shared/services/asset.service';
 export class AssetlistComponent implements OnInit {
 
   assets: Asset[] = undefined;
+  publicAssets: Asset[] = undefined;
 
   constructor(private assetService: AssetService) { }
 
   ngOnInit() {
+    
     this.assetService.getAssets().subscribe(
       (next) => { this.assets = next; },
       (error) => { console.log(error); }
-    )
+    );
+
+    this.assetService.getPublicAssets().subscribe(
+      (next) => { this.publicAssets = next; },
+      (error) => { console.log(error); }
+    );
   }
 
 }

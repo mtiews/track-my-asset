@@ -13,17 +13,25 @@ import { AssetService, Asset } from '../shared/services/asset.service';
 export class AssetdetailsComponent implements OnInit {
 
   readonly = true;
-  asset: Asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
+  isOwner = false;
+  asset: Asset = null;
 
   constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
+    this.resetForm();
     this.route.params.subscribe((params) => {
+      this.resetForm();
       const assetId = params['id'];
       if(assetId) {
         this.service.getAsset(assetId).subscribe(
           (result) => {
             this.asset = result;
+            if(this.asset.owner === this.auth.getCurrentUserInfo().mail) {
+              this.isOwner = true;
+            } else {
+              this.isOwner = false;
+            }
           },
           (error) => {
             this.showSnackbar('ERROR: Loading asset failed!');
@@ -34,6 +42,7 @@ export class AssetdetailsComponent implements OnInit {
       }
       else {
         this.readonly = false;
+        this.isOwner = true;
         this.asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
       }
     });
@@ -58,6 +67,7 @@ export class AssetdetailsComponent implements OnInit {
         (result) => {
           this.showSnackbar('Asset created!');
           this.asset = result;
+          this.router.navigate(['/details', this.asset.id]);
         },
         (error) => {
           this.showSnackbar('ERROR: Creating asset failed!');
@@ -84,6 +94,10 @@ export class AssetdetailsComponent implements OnInit {
 
   editAssetClicked() {
     this.readonly = false;
+  }
+
+  resetForm() {
+    this.asset = new Asset(null, this.auth.getCurrentUserInfo().mail, 'private', '', '', 0, 0);
   }
 
   showSnackbar(message: string) {

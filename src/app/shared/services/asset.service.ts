@@ -16,37 +16,51 @@ export class AssetService {
   getAssets(): Observable<Asset[]> {
     return this.http.get(this.baseUrl + '/assets', this.getRequestOptions())
       .map((res:Response) => res.json() as Asset[])
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch((error:any) => this.handleError(error));
+  }
+
+  getPublicAssets(): Observable<Asset[]> {
+    return this.http.get(this.baseUrl + '/publicassets', this.getRequestOptions())
+      .map((res:Response) => res.json() as Asset[])
+      .catch((error:any) => this.handleError(error));
   }
 
   getAsset(id: string): Observable<Asset> {
     return this.http.get(this.baseUrl + '/assets/' + id, this.getRequestOptions())
       .map((res:Response) => res.json() as Asset)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch((error:any) => this.handleError(error));
   }
 
   createAsset(asset: Asset): Observable<Asset> {
     return this.http.post(this.baseUrl + '/assets', asset, this.getRequestOptions())
       .map((res:Response) => res.json() as Asset)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch((error:any) => this.handleError(error));
   }
 
   updateAsset(asset: Asset): Observable<Asset> {
     return this.http.put(this.baseUrl + '/assets/' + asset.id, asset, this.getRequestOptions())
       .map((res:Response) => res.json() as Asset)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch((error:any) => this.handleError(error));
   }
 
   deleteAsset(id: string): Observable<Asset> {
     return this.http.delete(this.baseUrl + '/assets/' + id, this.getRequestOptions())
       .map((res:Response) => res.json() as Asset)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch((error:any) => this.handleError(error));
   }
 
   private getRequestOptions() {
     let headers = new Headers({ 'Authorization': 'Bearer ' + this.auth.getIdToken() });
     let options = new RequestOptions({ headers: headers });
     return options;
+  }
+
+  private handleError(error) {
+    // console.log(JSON.stringify(error));
+    if(error.status === 401) {
+      this.auth.logout();
+    }
+    return Observable.throw('Server error: ' + error.status + ' ' + error.statusText);
   }
 }
 
@@ -60,6 +74,16 @@ export class AssetServiceMock extends AssetService {
 
   getAssets(): Observable<Asset[]> {
     return Observable.of(Array.from(this.assets.values()));
+  }
+
+  getPublicAssets(): Observable<Asset[]> {
+    const assetlist = new Array<Asset>();
+    this.assets.forEach(a => {
+      if(a.visibility === 'public') {
+        assetlist.push(a);
+      };
+    });
+    return Observable.of(assetlist);
   }
 
   getAsset(id: string): Observable<Asset> {

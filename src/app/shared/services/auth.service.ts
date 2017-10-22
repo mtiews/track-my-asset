@@ -17,10 +17,10 @@ export class AuthService {
   private currentUserInfo: UserInfo;
   
   auth0 = new auth0.WebAuth({
-    clientID: 'f1G413kRXgqQWOuuY5nXhFeRnlluOu6e',
-    domain: 'tiews.eu.auth0.com',
-    audience: 'https://tiews.eu.auth0.com/userinfo',
-    redirectUri: environment.auth0RedirectUri,      
+    clientID: environment.auth0_clientID,
+    domain: environment.auth0_domain,
+    audience: environment.auth0_audience,
+    redirectUri: environment.auth0_redirectUri,      
     responseType: 'token id_token',
     scope: 'openid profile email'
   });
@@ -86,10 +86,12 @@ export class AuthService {
   }
 
   public getIdToken() {
+    this._isAuthenticatedSource.next(this.isAuthenticated());
     return localStorage.getItem('id_token');
   }
 
   public getCurrentUserInfo() {
+    this._isAuthenticatedSource.next(this.isAuthenticated());
     return this.currentUserInfo;
   }
 }

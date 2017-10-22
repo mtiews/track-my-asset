@@ -1,24 +1,50 @@
 <div>
-  <mat-card *ngIf="!assets || assets.length == 0" style="margin: 15px;">
-    <mat-card-header>
-      <mat-card-title><h3>No Assets Available</h3></mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button [routerLink]="['/details']">Create a new one...</button>
-      </mat-card-actions>
-    </mat-card-content>
-  </mat-card>
-  <mat-card *ngFor="let a of assets" style="margin: 15px;">
-    <mat-card-header>
-      <mat-card-title>{{a.name}}</mat-card-title>
-      <mat-card-subtitle>Identifier: {{a.id}}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
-        <button mat-raised-button [routerLink]="['/details', a.id]">Details</button>
-      </mat-card-actions>
-    </mat-card-content>
-  </mat-card>
+  <mat-tab-group>
+    <mat-tab label="Your Assets">
+      <mat-card *ngIf="!assets || assets.length == 0" style="margin: 15px;">
+        <mat-card-header>
+          <mat-card-title><h3>No Assets Available</h3></mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button [routerLink]="['/details']">Create a new one...</button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngFor="let a of assets" style="margin: 15px;">
+        <mat-card-header>
+          <mat-card-title>{{a.name}}</mat-card-title>
+          <mat-card-subtitle>Identifier: {{a.id}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
+            <button mat-raised-button [routerLink]="['/details', a.id]">Details</button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="Public Assets">
+      <mat-card *ngIf="!publicAssets || publicAssets.length == 0" style="margin: 15px;">
+        <mat-card-header>
+          <mat-card-title><h3>No Public Assets Available</h3></mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngFor="let a of publicAssets" style="margin: 15px;">
+        <mat-card-header>
+          <mat-card-title>{{a.name}}</mat-card-title>
+          <mat-card-subtitle>Identifier: {{a.id}}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
+            <button mat-raised-button [routerLink]="['/details', a.id]">Details</button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
 </div>
+
