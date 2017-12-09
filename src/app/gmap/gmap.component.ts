@@ -12,7 +12,7 @@ import { AssetService, Asset } from '../shared/services/asset.service';
 })
 export class GmapComponent implements OnInit {
 
-  title: string = '';
+  title: string = 'Asset Position';
   lat: number = 0.0;
   lng: number = 0.0;
   zoom: number = 15;
@@ -28,6 +28,15 @@ export class GmapComponent implements OnInit {
             this.title = result.name;
             this.lat = 0.0;
             this.lng = 0.0;
+            if(result.datapoints) {
+              result.datapoints.forEach(v => {
+                if('gps_lat' === v.id) {
+                  this.lat = Number(v.value);
+                } else if('gps_lon' === v.id) {
+                  this.lng = Number(v.value);
+                }
+              });
+            }
           },
           (error) => {
             this.showSnackbar('ERROR: Loading asset failed!');

@@ -13,7 +13,8 @@ const jwksRsa = require('jwks-rsa');
 const config = require('./server/configuration');
 
 // get api routes
-const api = require('./server/routes/api');
+const webUiApi = require('./server/routes/webui.api');
+const assetApi = require('./server/routes/asset.api');
 const app = express();
 
 // POST data parser
@@ -38,8 +39,12 @@ const checkJwt = jwt({
 // Static content
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Init routes
-app.use('/api', checkJwt, api);
+// Init web ui routes
+app.use('/api/webui', checkJwt, webUiApi);
+
+// Init asset routes, used for submitting asset data points
+app.use('/api/assets', assetApi);
+
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {

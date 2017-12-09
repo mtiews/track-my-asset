@@ -18,3 +18,16 @@ Used technologies:
 UI development is done using Angular CLI. Simply run `ng serve` to run the UI without backend (backend is mocked, see `src/app/shared/services/service.providers.ts`)
 
 The backend is developed using Node.js, run `node server.js` to start the server. The Angular-based UI is served from the `dist` directory, so run `ng build` before starting the server or run `npm run buildrun`.
+
+## User Manual
+
+### Web UI
+
+The Web UI can be use to create, view and edit the assets. And to view the current values (incl. GPS position if
+available) submitted by your assets.
+
+### Asset API
+
+API to let your assets submit data points (incl. GPS position) to the backend services. The submitted data is
+available via the Web UI.
+

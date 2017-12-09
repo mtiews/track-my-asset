@@ -1,9 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {DataSource} from '@angular/cdk/collections';
 import { AuthService, UserInfo } from '../shared/services/auth.service';
-import { MatSnackBar, MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material';
+import { 
+  MatSnackBar, 
+  MatSnackBarConfig, 
+  MatSnackBarHorizontalPosition, 
+  MatSnackBarVerticalPosition 
+} from '@angular/material';
 
-import { AssetService, Asset } from '../shared/services/asset.service';
+import { AssetService, Asset, Datapoint } from '../shared/services/asset.service';
 
 @Component({
   selector: 'app-assetdetails',
@@ -18,9 +26,14 @@ export class AssetdetailsComponent implements OnInit {
   userInfo: UserInfo = null;
   isNewAsset: boolean = false;
 
+  private _datapointsSource = new BehaviorSubject<Datapoint[]>([]);
+  datapointsDataSource: DatapointsDataSource | null;
+  dplistDisplayedColumns = ['id', 'value', 'timestamp'];
+
   constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
+    this.datapointsDataSource = new DatapointsDataSource(this._datapointsSource);
     this.resetForm();
     
     this.auth.userInfo$.subscribe((userInfo) => {
@@ -47,6 +60,7 @@ export class AssetdetailsComponent implements OnInit {
               } else {
                 this.isOwner = false;
               }
+              this._datapointsSource.next(this.asset.datapoints);
             } else {
               setTimeout(() =>
                 this.showSnackbar('ERROR: Asset not found!'),
@@ -117,6 +131,7 @@ export class AssetdetailsComponent implements OnInit {
     this.readonly = false;
     this.isOwner = true;
     this.asset = new Asset(null, null, 'private', '', '', 0, 0);
+    this._datapointsSource.next([]);
   }
 
   showSnackbar(message: string) {
@@ -126,4 +141,19 @@ export class AssetdetailsComponent implements OnInit {
     config.duration = 10000;
     this.snackBar.open(message, 'Close', config);
   }
+}
+
+export class DatapointsDataSource extends DataSource<Datapoint> {
+  public isEmpty = true;
+
+  constructor(private _datapointsSource: BehaviorSubject<Datapoint[]>) {
+    super();
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<Datapoint[]> {
+      return this._datapointsSource.do(data => this.isEmpty = (!data || data.length === 0));
+  }
+
+  disconnect() {}
 }

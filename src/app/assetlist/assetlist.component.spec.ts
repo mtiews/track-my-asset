@@ -3,7 +3,11 @@ import { HttpModule } from '@angular/http';
 
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MaterialModule } from '@angular/material';
+import { 
+  MatCardModule
+} from '@angular/material';
+
+import { AuthService } from '../shared/services/auth.service';
 
 import { assetServiceProvider } from '../shared/services/service.providers';
 import { AssetlistComponent } from './assetlist.component';
@@ -16,12 +20,13 @@ describe('AssetlistComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AssetlistComponent ],
       imports: [ 
-        MaterialModule,
         RouterTestingModule,
-        HttpModule
+        HttpModule,
+        MatCardModule
       ],
       providers: [
-        assetServiceProvider
+        assetServiceProvider,
+        AuthService
       ]
     })
     .compileComponents();

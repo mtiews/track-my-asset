@@ -3,7 +3,7 @@
       <mat-card-header>
         <mat-card-title><h3>{{asset?.id ? 'Asset Details' : 'Create New Asset'}}</h3></mat-card-title>
         <mat-card-subtitle>Identifier: {{asset?.id ? asset.id : '[will be created automatically for new Assets]'}}</mat-card-subtitle>
-        <mat-card-subtitle>Owner: {{asset?.owner ? asset.owner : '[will be set automatically for new Assets]'}}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="isOwner">Owner: {{asset?.owner ? asset.owner : '[will be set automatically for new Assets]'}}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <form class="form" #assetForm="ngForm">
@@ -35,6 +35,23 @@
         <mat-card-title><h3>Submitted Data Points</h3></mat-card-title>
       </mat-card-header>
       <mat-card-content>
+        <mat-table #table [dataSource]="datapointsDataSource">
+          <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.value}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="timestamp">
+            <mat-header-cell *matHeaderCellDef> Timestamp </mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{row.timestamp | date:'medium'}} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="dplistDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: dplistDisplayedColumns;"></mat-row>
+        </mat-table>     
+        <div *ngIf="datapointsDataSource.isEmpty" style="padding: 5px;">No datapoints available!</div>         
       </mat-card-content>
     </mat-card>
   </div>

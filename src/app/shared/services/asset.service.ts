@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class AssetService {
 
-  baseUrl = './api';
+  baseUrl = './api/webui';
 
   constructor(private http: Http, protected auth: AuthService) { }
 
@@ -110,7 +110,12 @@ export class AssetServiceMock extends AssetService {
 }
 
 export class Asset {
+  public datapoints: Datapoint[] = new Array();
   constructor(public id: string, public owner: string, public visibility: AssetVisibility, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
+}
+
+export class Datapoint {
+  constructor(public id: string, public value: any, public timestamp: number) {}
 }
 
 export declare type AssetVisibility = 'private' | 'public';

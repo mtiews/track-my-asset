@@ -11,27 +11,31 @@
       </mat-toolbar>
   </div>
   <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav [mode]="sidenavMode" [opened]="sidenavOpened && isAuthenticated" #sidenav class="mat-elevation-z6 sidenav">
-        <mat-nav-list>
-          <a mat-list-item (click)="closeSideNav()" [routerLink]="['/list']">
-            <mat-icon mat-list-icon>view_list</mat-icon>
-            <span mat-line>Assets</span>
-            <span mat-line class="secondary">List</span>
-          </a>
-          <a mat-list-item (click)="closeSideNav()" [routerLink]="['/details']">
-            <mat-icon mat-list-icon>playlist_add</mat-icon>
-            <span mat-line>Assets</span>
-            <span mat-line class="secondary">Add New</span>
-          </a>
-          <mat-divider></mat-divider>
-          <a mat-list-item (click)="closeSideNav()" [routerLink]="['/info']">
-            <mat-icon mat-list-icon>info_outline</mat-icon>
-            <span mat-line>Info</span>
-          </a>
-        </mat-nav-list>
-      </mat-sidenav>
-      <div class="sidenav-content">
-        <router-outlet></router-outlet>  
-      </div>
-    </mat-sidenav-container>  
+    <mat-sidenav [mode]="sidenavMode" [opened]="sidenavOpened && isAuthenticated" #sidenav class="mat-elevation-z6 sidenav">
+      <mat-nav-list>
+        <a mat-list-item (click)="closeSideNav()" [routerLink]="['/list']">
+          <mat-icon mat-list-icon>view_list</mat-icon>
+          <span mat-line>Asset List</span>
+          <!--
+          <span mat-line class="secondary">List</span>
+          -->
+        </a>
+        <a mat-list-item (click)="closeSideNav()" [routerLink]="['/details']">
+          <mat-icon mat-list-icon>playlist_add</mat-icon>
+          <span mat-line>New Asset</span>
+          <!--
+          <span mat-line class="secondary">Add New</span>
+          -->
+        </a>
+        <mat-divider></mat-divider>
+        <a mat-list-item (click)="closeSideNav()" [routerLink]="['/info']">
+          <mat-icon mat-list-icon>info_outline</mat-icon>
+          <span mat-line>Info</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <div class="sidenav-content">
+      <router-outlet></router-outlet>  
+    </div>
+  </mat-sidenav-container>  
 </div>

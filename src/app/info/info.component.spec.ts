@@ -1,5 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 
+import { 
+  MatCardModule
+} from '@angular/material';
+
+import { AuthService } from '../shared/services/auth.service';
 import { InfoComponent } from './info.component';
 
 describe('InfoComponent', () => {
@@ -8,7 +14,16 @@ describe('InfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoComponent ]
+      declarations: [ 
+        InfoComponent 
+      ],
+      imports: [
+        MatCardModule,
+        HttpModule
+      ],
+      providers: [
+        AuthService
+      ]
     })
     .compileComponents();
   }));
@@ -19,7 +34,7 @@ describe('InfoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should be created', () => {
+  it('should be created', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 });
