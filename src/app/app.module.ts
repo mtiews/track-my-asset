@@ -38,6 +38,7 @@ import { GmapComponent } from './gmap/gmap.component';
 import { LoginComponent } from './login/login.component';
 import { InfoComponent } from './info/info.component';
 import { AssetdetailsComponent } from './assetdetails/assetdetails.component';
+import { AssetdataComponent } from './assetdata/assetdata.component';
 
 const appRoutes: Routes = [
   {
@@ -68,6 +69,10 @@ const appRoutes: Routes = [
     path: 'details/:id',
     component: AssetdetailsComponent,
     data: { title: 'Asset Details' }
+  }, {
+      path: 'data/:id',
+      component: AssetdataComponent,
+      data: { title: 'Asset Data' }
   }, { 
     path: '',
     redirectTo: '/list',
@@ -82,7 +87,8 @@ const appRoutes: Routes = [
     GmapComponent,
     LoginComponent,
     InfoComponent,
-    AssetdetailsComponent
+    AssetdetailsComponent,
+    AssetdataComponent
   ],
   imports: [
     BrowserModule,

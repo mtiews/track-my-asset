@@ -69,6 +69,7 @@ router.get('/:id', (req, res) => {
     if(gps_lat && gps_lon) {
       asset.gps_lon = gps_lon;
       asset.gps_lat = gps_lat;
+      asset.gps_timestamp = ts;
     }
     asset.lastsignal_ts = ts;
     persistence.updateAssetDatapoints(asset);

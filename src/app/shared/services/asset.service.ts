@@ -99,6 +99,8 @@ export class AssetServiceMock extends AssetService {
   createAsset(asset: Asset): Observable<Asset> {
     asset.id = (new Date()).getTime().toString();
     asset.owner = this.auth.getCurrentUserInfo().mail;
+    asset.gps_lat = 0.0;
+    asset.gps_lon = 0.0;
     asset.datapoints = [ new Datapoint("sens1", 1234, new Date().getTime()), new Datapoint("sens2", 2345, new Date().getTime())]
     this.assets.set(asset.id, asset);
     return Observable.of(asset);
@@ -127,6 +129,7 @@ export class Asset {
   public datapoints: Datapoint[] = new Array();
   public gps_lat: 0.0;
   public gps_lon: 0.0;
+  public gps_timestamp: 0;
   constructor(public id: string, public secret: string, public owner: string, public visibility: AssetVisibility, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
 }
 

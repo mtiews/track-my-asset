@@ -19,7 +19,8 @@
         </mat-card-header>
         <mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
+            <button mat-raised-button [routerLink]="['/gmap', a.id]" [disabled]="a.gps_lat == 0 && a.gps_lon == 0">Show On Map</button>
+            <button mat-raised-button [routerLink]="['/data', a.id]">Submitted Data</button>
             <button mat-raised-button [routerLink]="['/details', a.id]">Details</button>
           </mat-card-actions>
         </mat-card-content>
@@ -41,7 +42,8 @@
         </mat-card-header>
         <mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button [routerLink]="['/gmap', a.id]">Show On Map</button>
+            <button mat-raised-button [routerLink]="['/gmap', a.id]" [disabled]="a.gps_lat == 0 && a.gps_lon == 0">Show On Map</button>
+            <button mat-raised-button [routerLink]="['/data', a.id]">Submitted Data</button>
             <button mat-raised-button [routerLink]="['/details', a.id]">Details</button>
           </mat-card-actions>
         </mat-card-content>

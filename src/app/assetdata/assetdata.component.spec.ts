@@ -1,39 +1,45 @@
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { 
   MatCardModule,
   MatSnackBarModule,
   MatButtonModule, 
-  MatSelectModule, 
-  MatInputModule,
-  MatSlideToggleModule
+  MatTableModule,
 } from '@angular/material';
 
-import { AssetdetailsComponent } from './assetdetails.component';
+import { AssetdataComponent } from './assetdata.component';
 import { assetServiceProvider } from '../shared/services/service.providers';
 import { AuthService } from '../shared/services/auth.service';
 
-describe('AssetdetailsComponent', () => {
-  let component: AssetdetailsComponent;
-  let fixture: ComponentFixture<AssetdetailsComponent>;
+@Component({
+  template: '<div></div>'
+})
+export class MockComponent {}
+
+describe('AssetdataComponent', () => {
+  let component: AssetdataComponent;
+  let fixture: ComponentFixture<AssetdataComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AssetdetailsComponent ],
+      declarations: [ AssetdataComponent, MockComponent ],
       imports: [
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([{
+          path: 'list',
+          component: MockComponent
+        }]),
         HttpModule,
         NoopAnimationsModule,
         FormsModule,
         MatButtonModule, 
-        MatSelectModule, 
-        MatInputModule,
         MatCardModule,
         MatSnackBarModule,
-        MatSlideToggleModule
+        MatTableModule
       ],
       providers: [
         assetServiceProvider,
@@ -44,7 +50,7 @@ describe('AssetdetailsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AssetdetailsComponent);
+    fixture = TestBed.createComponent(AssetdataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
