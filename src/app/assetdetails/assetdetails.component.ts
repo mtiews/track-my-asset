@@ -138,12 +138,12 @@ export class AssetdetailsComponent implements OnInit {
               this.isOwner = false;
             }
             this._datapointsSource.next(this.asset.datapoints);
+            this.ref.markForCheck();
           } else {
             setTimeout(() =>
               this.showSnackbar('ERROR: Asset not found!'),
               1000);
               this.router.navigate(['list']);
-              
           }
         },
         (error) => {
@@ -154,8 +154,8 @@ export class AssetdetailsComponent implements OnInit {
       );
     } else {
       this.isNewAsset = true;
+      this.ref.markForCheck();
     }
-    this.ref.markForCheck();
   }
 
   showSnackbar(message: string) {
