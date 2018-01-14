@@ -13,11 +13,14 @@ var persistence = {
   },
   createAsset: function(asset) {
     asset.id = uuidv4();
+    asset.gps_lat = 0.0;
+    asset.gps_lon = 0.0;
     return stripMetadata(db.getCollection(ASSET_COLLECTION).insert(asset));
   },
   updateAsset: function(asset) {
     const oldAsset = db.getCollection(ASSET_COLLECTION).findOne({'id': asset.id});
     oldAsset.name = asset.name;
+    oldAsset.secret = asset.secret;
     oldAsset.description = asset.description;
     oldAsset.visibility = asset.visibility;
     return stripMetadata(db.getCollection(ASSET_COLLECTION).update(oldAsset));
@@ -25,6 +28,8 @@ var persistence = {
   updateAssetDatapoints: function(asset) {
     const oldAsset = db.getCollection(ASSET_COLLECTION).findOne({'id': asset.id});
     oldAsset.datapoints = asset.datapoints;
+    oldAsset.gps_lat = asset.gps_lat;
+    oldAsset.gps_lon = asset.gps_lon;
     oldAsset.lastsignal_ts = asset.lastsignal_ts;
     return stripMetadata(db.getCollection(ASSET_COLLECTION).update(oldAsset));
   },
@@ -32,6 +37,12 @@ var persistence = {
     const asset = db.getCollection(ASSET_COLLECTION).findOne({'id': id});
     db.getCollection(ASSET_COLLECTION).remove(asset);
     return stripMetadata(asset);
+  },
+  deleteAssetDatapoint: function(assetId, dpId) {
+    const asset = db.getCollection(ASSET_COLLECTION).findOne({'id': assetId});
+    var newdps = asset.datapoints.filter(d => d.id !== dpId);
+    asset.datapoints = newdps;
+    return stripMetadata(db.getCollection(ASSET_COLLECTION).update(asset));
   }
 }
 

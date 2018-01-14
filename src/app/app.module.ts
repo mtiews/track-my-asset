@@ -16,7 +16,9 @@ import {
   MatInputModule,
   MatSnackBarModule, 
   MatTabsModule,
-  MatTableModule
+  MatTableModule,
+  MatSlideToggleModule,
+  MatChipsModule
 } from '@angular/material';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -104,6 +106,8 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatTabsModule,
     MatTableModule,
+    MatSlideToggleModule,
+    MatChipsModule,
     HttpModule
   ],
   providers: [

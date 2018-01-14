@@ -19,6 +19,16 @@ UI development is done using Angular CLI. Simply run `ng serve` to run the UI wi
 
 The backend is developed using Node.js, run `node server.js` to start the server. The Angular-based UI is served from the `dist` directory, so run `ng build` before starting the server or run `npm run buildrun`.
 
+## Configuration
+
+### UI
+The configuration can be found in the `environment.ts`. Please use your own Google-API keys! 
+
+For authentication Auth0 is used. Create your own OpenId Connect Application in your Auth0 account and configure the `auth0_` settings according to your needs.
+
+### Backend
+The configuration for the backend can be found in the file `configuration.js` file. Ensure that the `oidc*` settings match your settings configured for your OpenId Connect Application in Auth0. The `oidc*` settings can be set via process environments (`OIDC_AUDIENCE`, `OIDC_ISSUER`, `OIDC_WELLKNOWN`).
+
 ## User Manual
 
 ### Web UI
@@ -28,6 +38,20 @@ available) submitted by your assets.
 
 ### Asset API
 
-API to let your assets submit data points (incl. GPS position) to the backend services. The submitted data is
-available via the Web UI.
+API to let your assets submit data points (incl. GPS position) to the backend services. The submitted data is available via the Web UI.
 
+API Endpoint: `/api/assets/<AssetId>`
+
+API Method: `GET`
+
+
+
+|Query Parameter|Type/Format|Description|
+|---------|-----------|-----------|
+|api_secret | String | Secret for this asset. Required, otherwise 401 Forbidden will be returned.|
+|api_timestamp | Number (milliseconds since epoche, UTC) | Timestamp of submitted values. If omitted the server time will be used.|
+|gps_lat| Number (decimal degrees)| GPS Latitude. Optional, but has to be submitted together with longitude.|
+|gps_lon| Number (decimal degrees) | GPS Longitude. Optional, but has to be submitted together with latitude.|
+|all others| various | All query other parameters will be stored as datapoints within the asset. |
+
+**Important: To allow further enhancements of the API all parameters starting with `api_` or `gps_` are reserved and should not be used for datapoints!**

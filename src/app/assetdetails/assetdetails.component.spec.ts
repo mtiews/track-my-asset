@@ -9,7 +9,8 @@ import {
   MatButtonModule, 
   MatSelectModule, 
   MatInputModule,
-  MatTableModule
+  MatTableModule,
+  MatSlideToggleModule
 } from '@angular/material';
 
 import { AssetdetailsComponent } from './assetdetails.component';
@@ -33,7 +34,8 @@ describe('AssetdetailsComponent', () => {
         MatInputModule,
         MatCardModule,
         MatSnackBarModule,
-        MatTableModule
+        MatTableModule,
+        MatSlideToggleModule
       ],
       providers: [
         assetServiceProvider,

@@ -10,3 +10,7 @@ html, body {
 body {
     overflow: hidden;
 }
+
+.mat-card-header .mat-card-title {
+    font-size: 18px;
+}

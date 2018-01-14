@@ -15,7 +15,7 @@ export class GmapComponent implements OnInit {
   title: string = 'Asset Position';
   lat: number = 0.0;
   lng: number = 0.0;
-  zoom: number = 15;
+  zoom: number = 11;
 
   constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute) { }
 
@@ -26,17 +26,8 @@ export class GmapComponent implements OnInit {
         this.service.getAsset(assetId).subscribe(
           (result) => {
             this.title = result.name;
-            this.lat = 0.0;
-            this.lng = 0.0;
-            if(result.datapoints) {
-              result.datapoints.forEach(v => {
-                if('gps_lat' === v.id) {
-                  this.lat = Number(v.value);
-                } else if('gps_lon' === v.id) {
-                  this.lng = Number(v.value);
-                }
-              });
-            }
+            this.lat = result.gps_lat;
+            this.lng = result.gps_lon;
           },
           (error) => {
             this.showSnackbar('ERROR: Loading asset failed!');

@@ -13,7 +13,7 @@
       </mat-card>
       <mat-card *ngFor="let a of assets" style="margin: 15px;">
         <mat-card-header>
-          <mat-card-title>{{a.name}}</mat-card-title>
+          <mat-card-title>{{a.name}} <mat-icon mat-list-icon  *ngIf="a.visibility == 'public'">group</mat-icon></mat-card-title>
           <mat-card-subtitle>Identifier: {{a.id}}</mat-card-subtitle>
           <mat-card-subtitle>Last Signal: {{a.lastsignal_ts | date:'medium'}}</mat-card-subtitle>
         </mat-card-header>

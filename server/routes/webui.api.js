@@ -19,6 +19,7 @@ router.get('/publicassets', (req, res) => {
   // hide possible private data
   assetList.forEach(asset => {
     asset.owner = null;
+    asset.secret = null;
   });
   res.json(assetList);
 });
@@ -58,6 +59,16 @@ router.delete('/assets/:id', (req,res) => {
   var asset = persistence.getAssetById(req.params.id);
   if(asset && asset.owner === req.user.email) {
     res.json(persistence.deleteAsset(req.params.id));
+  } else {
+    res.status(403).send("Access Denied");
+  }
+});
+
+router.delete('/assets/:id/datapoints/:dpid', (req,res) => {
+  console.log('WebUI API - DELETE Asset Datapoint: ' + req.params.id + "/ Datapoint:" + req.params.dpid);
+  var asset = persistence.getAssetById(req.params.id);
+  if(asset && asset.owner === req.user.email) {
+    res.json(persistence.deleteAssetDatapoint(req.params.id, req.params.dpid));
   } else {
     res.status(403).send("Access Denied");
   }

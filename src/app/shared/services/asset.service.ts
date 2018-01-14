@@ -49,6 +49,12 @@ export class AssetService {
       .catch((error:any) => this.handleError(error));
   }
 
+  deleteAssetDatapoint(assetId: string, dpId: string): Observable<Asset> {
+    return this.http.delete(this.baseUrl + '/assets/' + assetId + '/datapoints/' + dpId, this.getRequestOptions())
+    .map((res:Response) => res.json() as Asset)
+    .catch((error:any) => this.handleError(error));
+  }
+
   private getRequestOptions() {
     let headers = new Headers({ 'Authorization': 'Bearer ' + this.auth.getIdToken() });
     let options = new RequestOptions({ headers: headers });
@@ -93,6 +99,7 @@ export class AssetServiceMock extends AssetService {
   createAsset(asset: Asset): Observable<Asset> {
     asset.id = (new Date()).getTime().toString();
     asset.owner = this.auth.getCurrentUserInfo().mail;
+    asset.datapoints = [ new Datapoint("sens1", 1234, new Date().getTime()), new Datapoint("sens2", 2345, new Date().getTime())]
     this.assets.set(asset.id, asset);
     return Observable.of(asset);
   }
@@ -107,10 +114,19 @@ export class AssetServiceMock extends AssetService {
     this.assets.delete(id);
     return Observable.of(asset);
   }
+
+  deleteAssetDatapoint(assetId: string, dpId: string): Observable<Asset> {
+    const asset = this.assets.get(assetId);
+    const newdatapoints = asset.datapoints.filter(s => s.id != dpId);
+    asset.datapoints = newdatapoints;
+    return Observable.of(asset);
+  }
 }
 
 export class Asset {
   public datapoints: Datapoint[] = new Array();
+  public gps_lat: 0.0;
+  public gps_lon: 0.0;
   constructor(public id: string, public owner: string, public visibility: AssetVisibility, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
 }
 

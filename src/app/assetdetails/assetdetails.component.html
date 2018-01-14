@@ -12,6 +12,13 @@
               <input matInput [readonly]="readonly" placeholder="Asset Name" [(ngModel)]="asset.name" name="assetname" required="true">
             </mat-form-field>
             <mat-form-field class="input-field">
+              <input matInput [readonly]="readonly" [type]="showSecret ? 'text' : 'password'" placeholder="Asset API Secret" [(ngModel)]="asset.secret" name="assetsecret" required="true">
+              <mat-hint align="start"><strong>Secret required to submit data for this asset via API. Keep it safe!</strong></mat-hint>
+            </mat-form-field>
+            <div class="mat-form-field">
+              <mat-slide-toggle [(ngModel)]="showSecret" name="secretCheckbox">Show Secret</mat-slide-toggle>
+            </div>
+            <mat-form-field class="input-field">
               <textarea matInput [readonly]="readonly" placeholder="Asset Description" [(ngModel)]="asset.description" name="assetdesc"></textarea>
             </mat-form-field>
             <mat-form-field class="input-field" *ngIf="isOwner">
@@ -19,7 +26,7 @@
                   <mat-option value="private">Private</mat-option>
                   <mat-option value="public">Public</mat-option>
               </mat-select>
-              <mat-hint align="start"><strong>If you set this to <i>Public</i> everyone will see this Asset! Take care.</strong></mat-hint>
+              <mat-hint align="start"><strong>If you set this to <i>Public</i> everyone will see this Asset. Take care!</strong></mat-hint>
             </mat-form-field>
           </div>
         </form>
@@ -47,6 +54,10 @@
           <ng-container matColumnDef="timestamp">
             <mat-header-cell *matHeaderCellDef> Timestamp </mat-header-cell>
             <mat-cell *matCellDef="let row"> {{row.timestamp | date:'medium'}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef style="flex: 0 0 80px;"></mat-header-cell>
+              <mat-cell *matCellDef="let row" style="flex: 0 0 80px;"><button mat-raised-button *ngIf="isOwner" (click)="deleteDatapointClicked(row.id)" style="min-width: 40px;"><mat-icon mat-list-icon>delete</mat-icon></button></mat-cell>
           </ng-container>
           <mat-header-row *matHeaderRowDef="dplistDisplayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: dplistDisplayedColumns;"></mat-row>

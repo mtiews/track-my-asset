@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
 import { AuthService, UserInfo } from '../shared/services/auth.service';
 import { 
+  MatCheckbox,
   MatSnackBar, 
   MatSnackBarConfig, 
   MatSnackBarHorizontalPosition, 
@@ -16,10 +17,12 @@ import { AssetService, Asset, Datapoint } from '../shared/services/asset.service
 @Component({
   selector: 'app-assetdetails',
   templateUrl: './assetdetails.component.html',
-  styleUrls: ['./assetdetails.component.css']
+  styleUrls: ['./assetdetails.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssetdetailsComponent implements OnInit {
 
+  showSecret = false;
   readonly = true;
   isOwner = false;
   asset: Asset = null;
@@ -28,13 +31,13 @@ export class AssetdetailsComponent implements OnInit {
 
   private _datapointsSource = new BehaviorSubject<Datapoint[]>([]);
   datapointsDataSource: DatapointsDataSource | null;
-  dplistDisplayedColumns = ['id', 'value', 'timestamp'];
+  dplistDisplayedColumns = ['id', 'value', 'timestamp', 'actions'];
 
-  constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router, private auth: AuthService) { }
+  constructor(private service: AssetService, public snackBar: MatSnackBar, private route: ActivatedRoute, private router: Router, private auth: AuthService, private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.datapointsDataSource = new DatapointsDataSource(this._datapointsSource);
-    this.resetForm();
+    this.updateForm(null);
     
     this.auth.userInfo$.subscribe((userInfo) => {
       this.userInfo = userInfo;
@@ -46,36 +49,8 @@ export class AssetdetailsComponent implements OnInit {
     });
 
     this.route.params.subscribe((params) => {
-      this.resetForm();
-
       const assetId = params['id'];
-      if(assetId) {
-        this.service.getAsset(assetId).subscribe(
-          (result) => {
-            if(result) {
-              this.asset = result;
-              this.readonly = true;
-              if(this.asset && this.userInfo && this.asset.owner === this.userInfo.mail) {
-                this.isOwner = true;
-              } else {
-                this.isOwner = false;
-              }
-              this._datapointsSource.next(this.asset.datapoints);
-            } else {
-              setTimeout(() =>
-                this.showSnackbar('ERROR: Asset not found!'),
-                1000);
-            }
-          },
-          (error) => {
-            this.showSnackbar('ERROR: Loading asset failed!');
-            console.error('Loading asset failed');
-          },
-          () => {}
-        );
-      } else {
-        this.isNewAsset = true;
-      }
+      this.updateForm(assetId);
     });
   }
 
@@ -84,7 +59,7 @@ export class AssetdetailsComponent implements OnInit {
       this.service.updateAsset(this.asset).subscribe(
         (result) => {
           this.showSnackbar('Asset updated!');
-          this.asset = result;
+          this.updateForm(result.id);
         },
         (error) => {
           this.showSnackbar('ERROR: Updating asset failed!');
@@ -97,8 +72,7 @@ export class AssetdetailsComponent implements OnInit {
       this.service.createAsset(this.asset).subscribe(
         (result) => {
           this.showSnackbar('Asset created!');
-          this.asset = result;
-          this.router.navigate(['/details', this.asset.id]);
+          this.updateForm(result.id);
         },
         (error) => {
           this.showSnackbar('ERROR: Creating asset failed!');
@@ -110,28 +84,78 @@ export class AssetdetailsComponent implements OnInit {
   }
 
   deleteAssetClicked() {
-    this.service.deleteAsset(this.asset.id).subscribe(
-      (result) => {
-        this.showSnackbar('Asset deleted!');
-        this.router.navigate(['list']);
-      },
-      (error) => {
-        this.showSnackbar('ERROR: Deleting asset failed!');
-        console.error('Deleting asset failed');
-      },
-      () => { /* finished */ }
-    );
+    if(confirm('Delete Asset "' + this.asset.name + '" ?')) {
+      this.service.deleteAsset(this.asset.id).subscribe(
+        (result) => {
+          this.showSnackbar('Asset deleted!');
+          this.router.navigate(['list']);
+        },
+        (error) => {
+          this.showSnackbar('ERROR: Deleting asset failed!');
+          console.error('Deleting asset failed');
+        },
+        () => { /* finished */ }
+      );
+    }
+  }
+
+  deleteDatapointClicked(id) {
+    if(confirm('Delete Datapoint "' + id + '" ?')) {
+      this.service.deleteAssetDatapoint(this.asset.id, id).subscribe(
+        (result) => {
+          this.showSnackbar('Sensor deleted!');
+          this.asset = result;
+          this.updateForm(result.id);
+        },
+        (error) => {
+          this.showSnackbar('ERROR: Deleting sensor failed!');
+          console.error('Deleting sensor failed');
+        },
+        () => { /* finished */ }
+      );
+    }
   }
 
   editAssetClicked() {
     this.readonly = false;
   }
 
-  resetForm() {
+  updateForm(assetId: string) {
     this.readonly = false;
     this.isOwner = true;
     this.asset = new Asset(null, null, 'private', '', '', 0, 0);
     this._datapointsSource.next([]);
+
+    if(assetId) {
+      this.service.getAsset(assetId).subscribe(
+        (result) => {
+          if(result) {
+            this.asset = result;
+            this.readonly = true;
+            if(this.asset && this.userInfo && this.asset.owner === this.userInfo.mail) {
+              this.isOwner = true;
+            } else {
+              this.isOwner = false;
+            }
+            this._datapointsSource.next(this.asset.datapoints);
+          } else {
+            setTimeout(() =>
+              this.showSnackbar('ERROR: Asset not found!'),
+              1000);
+              this.router.navigate(['list']);
+              
+          }
+        },
+        (error) => {
+          this.showSnackbar('ERROR: Loading asset failed!');
+          console.error('Loading asset failed');
+        },
+        () => {}
+      );
+    } else {
+      this.isNewAsset = true;
+    }
+    this.ref.markForCheck();
   }
 
   showSnackbar(message: string) {
