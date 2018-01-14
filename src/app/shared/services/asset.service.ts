@@ -127,7 +127,7 @@ export class Asset {
   public datapoints: Datapoint[] = new Array();
   public gps_lat: 0.0;
   public gps_lon: 0.0;
-  constructor(public id: string, public owner: string, public visibility: AssetVisibility, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
+  constructor(public id: string, public secret: string, public owner: string, public visibility: AssetVisibility, public name: string, public description: string, public created_ts: number, public lastsignal_ts: number) {}
 }
 
 export class Datapoint {

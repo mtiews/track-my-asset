@@ -123,7 +123,7 @@ export class AssetdetailsComponent implements OnInit {
   updateForm(assetId: string) {
     this.readonly = false;
     this.isOwner = true;
-    this.asset = new Asset(null, null, 'private', '', '', 0, 0);
+    this.asset = new Asset(null, null, null, 'private', '', '', 0, 0);
     this._datapointsSource.next([]);
 
     if(assetId) {
